@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
+import { toast } from "sonner";
 
 interface AddToCartButtonProps {
   product: Product;
@@ -25,17 +26,19 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Show confirmation to view cart
-      const goToCart = window.confirm(
-        `${product.title} added to your cart! View cart now?`
-      );
-
-      if (goToCart) {
-        router.push("/cart");
-      }
+      // Show success toast instead of confirmation dialog
+      toast.success(`${product.title} added to your cart!`, {
+        description: "View your cart to checkout.",
+        action: {
+          label: "View Cart",
+          onClick: () => router.push("/cart"),
+        },
+      });
     } catch (error) {
       console.error("Failed to add product to cart:", error);
-      alert("Failed to add product to cart. Please try again.");
+      toast.error("Failed to add product to cart", {
+        description: "Please try again later.",
+      });
     } finally {
       setIsAddingToCart(false);
     }

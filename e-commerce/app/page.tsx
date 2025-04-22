@@ -27,21 +27,21 @@ export default async function Home() {
         </div>
         <div className="container mx-auto relative z-10 px-4">
           <div className="max-w-xl text-white">
-            <h1 className="text-5xl font-bold mb-4">
+            <h1 className="text-5xl font-poppins font-bold mb-4 tracking-tight">
               Discover Quality Products
             </h1>
-            <p className="text-xl mb-8">
+            <p className="text-xl mb-8 font-inter">
               Shop the latest trends with our curated collection of premium
               items for every need.
             </p>
             <div className="flex gap-4">
-              <Button size="lg" asChild>
+              <Button size="lg" asChild className="font-poppins">
                 <Link href="/products">Shop Now</Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/20"
+                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/20 font-inter"
               >
                 View Collections
               </Button>
@@ -51,11 +51,13 @@ export default async function Home() {
       </section>
 
       {/* Featured Products Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold">Featured Products</h2>
-            <Button variant="ghost" asChild>
+            <h2 className="text-3xl font-bold font-poppins tracking-tight">
+              Featured Products
+            </h2>
+            <Button variant="ghost" asChild className="font-inter">
               <Link href="/products">View All</Link>
             </Button>
           </div>
@@ -71,8 +73,10 @@ export default async function Home() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold">Shop by Category</h2>
-            <Button variant="ghost" asChild>
+            <h2 className="text-3xl font-bold font-poppins tracking-tight">
+              Shop by Category
+            </h2>
+            <Button variant="ghost" asChild className="font-inter">
               <Link href="/categories">View All Categories</Link>
             </Button>
           </div>
@@ -95,10 +99,10 @@ export default async function Home() {
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col items-center justify-end p-6">
-                  <h3 className="text-xl font-bold text-white capitalize mb-2">
+                  <h3 className="text-xl font-bold font-poppins text-white capitalize mb-2">
                     {category}
                   </h3>
-                  <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+                  <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-inter">
                     Shop Now
                   </span>
                 </div>
@@ -109,11 +113,13 @@ export default async function Home() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-16 bg-primary/5">
+      <section className="py-16 bg-primary/5 dark:bg-primary/10">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-            <p className="text-lg mb-8">
+            <h2 className="text-3xl font-bold font-poppins tracking-tight mb-4">
+              Stay Updated
+            </h2>
+            <p className="text-lg mb-8 font-inter">
               Subscribe to our newsletter for exclusive offers and the latest
               updates.
             </p>
@@ -121,9 +127,9 @@ export default async function Home() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="px-4 py-2 border rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-primary"
+                className="px-4 py-2 border rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-primary font-inter"
               />
-              <Button>Subscribe</Button>
+              <Button className="font-poppins">Subscribe</Button>
             </div>
           </div>
         </div>

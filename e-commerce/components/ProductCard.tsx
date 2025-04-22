@@ -15,6 +15,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
+import { toast } from "sonner";
+import { ProductDetailsSheet } from "./ProductDetailsSheet";
 
 interface ProductCardProps {
   product: Product;
@@ -36,17 +38,19 @@ export function ProductCard({ product }: ProductCardProps) {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Show success message or redirect to cart
-      const goToCart = window.confirm(
-        `${product.title} added to your cart! View cart now?`
-      );
-
-      if (goToCart) {
-        router.push("/cart");
-      }
+      // Show success toast instead of confirmation dialog
+      toast.success(`${product.title} added to your cart!`, {
+        description: "View your cart to checkout.",
+        action: {
+          label: "View Cart",
+          onClick: () => router.push("/cart"),
+        },
+      });
     } catch (error) {
       console.error("Failed to add product to cart:", error);
-      alert("Failed to add product to cart. Please try again.");
+      toast.error("Failed to add product to cart", {
+        description: "Please try again later.",
+      });
     } finally {
       setIsAddingToCart(false);
     }
@@ -54,13 +58,13 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card
-      className="w-full max-w-sm overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 flex flex-col h-full"
+      className="w-full max-w-sm overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative h-60 w-full overflow-hidden bg-white">
+      <div className="relative h-72 w-full overflow-hidden bg-white dark:bg-gray-950">
         <div className="absolute top-2 right-2 z-10">
-          <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+          <span className="inline-flex items-center rounded-full bg-purple-50 dark:bg-purple-900/30 px-2.5 py-0.5 text-xs font-medium text-primary dark:text-primary">
             {product.category}
           </span>
         </div>
@@ -68,43 +72,50 @@ export function ProductCard({ product }: ProductCardProps) {
           src={product.image}
           alt={product.title}
           fill
-          className={`object-contain p-4 transition-transform duration-500 ${
+          className={`object-contain p-4 transition-transform duration-500 w-full h-full ${
             isHovered ? "scale-110" : "scale-100"
           }`}
+          // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={product.id < 4} // Prioritize first 3 images for loading
         />
       </div>
-      <CardHeader className="pb-2">
-        <CardTitle className="line-clamp-1 text-lg">{product.title}</CardTitle>
-        <CardDescription className="line-clamp-2 h-10 text-sm">
+      <CardHeader className="pb-2 pt-4">
+        <CardTitle className="line-clamp-1 text-lg font-poppins font-semibold tracking-tight">
+          {product.title}
+        </CardTitle>
+        <CardDescription className="line-clamp-2 h-10 text-sm font-inter mt-1">
           {product.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-2 pt-0">
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-blue-700">
+          <div className="text-2xl font-bold text-primary dark:text-primary font-poppins">
             ${product.price.toFixed(2)}
           </div>
-          <div className="flex items-center gap-1 text-sm bg-amber-50 px-2 py-0.5 rounded">
-            <span className="text-amber-500">★</span>
-            <span className="text-gray-700">
+          <div className="flex items-center gap-1 text-sm bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
+            <span className="text-accent">★</span>
+            <span className="text-gray-700 dark:text-gray-300 font-inter text-xs">
               {product.rating.rate} ({product.rating.count})
             </span>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between mt-auto pt-2 border-t">
-        <Button
-          variant="outline"
-          size="sm"
-          asChild
-          className="border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-        >
-          <Link href={`/products/${product.id}`}>View Details</Link>
-        </Button>
+      <CardFooter className="flex justify-between mt-auto pt-3 border-t gap-2">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="border-primary/20 dark:border-primary/20 hover:bg-primary/10 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary font-inter text-xs"
+          >
+            <Link href={`/products/${product.id}`}>Details</Link>
+          </Button>
+          <ProductDetailsSheet product={product} />
+        </div>
         <Button
           onClick={handleAddToCart}
           disabled={isAddingToCart}
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-white dark:text-primary-foreground font-medium"
         >
           {isAddingToCart ? "Adding..." : "Add to Cart"}
         </Button>

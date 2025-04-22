@@ -10,6 +10,7 @@ import React, {
 import { Product, CartItem, addToCart, getUserCart } from "@/lib/api";
 import { useAuth } from "./AuthContext";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface CartItemWithProduct extends CartItem {
   product: Product;
@@ -36,6 +37,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const { isAuthenticated, user } = useAuth();
   const [items, setItems] = useState<CartItemWithProduct[]>([]);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -46,7 +48,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   // Load cart data from localStorage or API when component mounts
   useEffect(() => {
     const loadCart = async () => {
-      setLoading(true);
+      setInitialLoading(true);
       try {
         if (isAuthenticated && user) {
           // If authenticated, try to get the user's cart from the API
@@ -89,8 +91,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load cart");
+        toast.error("Failed to load cart", {
+          description: "There was a problem loading your cart items.",
+        });
       } finally {
-        setLoading(false);
+        setInitialLoading(false);
       }
     };
 
@@ -144,9 +149,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         });
       }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to add item to cart"
-      );
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to add item to cart";
+      setError(errorMessage);
+      toast.error("Failed to add item", {
+        description: errorMessage,
+      });
       throw err;
     } finally {
       setLoading(false);
@@ -155,38 +163,60 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   // Remove an item from the cart
   const removeItem = (productId: number) => {
-    setItems(items.filter((item) => item.productId !== productId));
+    try {
+      const itemToRemove = items.find((item) => item.productId === productId);
+      setItems(items.filter((item) => item.productId !== productId));
+
+      if (itemToRemove) {
+        toast.success("Item removed", {
+          description: `${itemToRemove.product.title} has been removed from your cart.`,
+        });
+      }
+    } catch (err) {
+      toast.error("Failed to remove item", {
+        description: "There was a problem removing this item from your cart.",
+      });
+    }
   };
 
   // Update item quantity
   const updateQuantity = (productId: number, quantity: number) => {
     if (quantity < 1) return;
 
-    const updatedItems = items.map((item) => {
-      if (item.productId === productId) {
-        return {
-          ...item,
-          quantity,
-          subtotal: item.product.price * quantity,
-        };
-      }
-      return item;
-    });
+    try {
+      const updatedItems = items.map((item) => {
+        if (item.productId === productId) {
+          return {
+            ...item,
+            quantity,
+            subtotal: item.product.price * quantity,
+          };
+        }
+        return item;
+      });
 
-    setItems(updatedItems);
+      setItems(updatedItems);
+    } catch (err) {
+      toast.error("Failed to update quantity", {
+        description: "There was a problem updating the item quantity.",
+      });
+    }
   };
 
   // Clear the cart
   const clearCart = () => {
     setItems([]);
     localStorage.removeItem("cart");
+    toast.success("Cart cleared", {
+      description: "All items have been removed from your cart.",
+    });
   };
 
   return (
     <CartContext.Provider
       value={{
         items,
-        loading,
+        loading: loading || initialLoading,
         error,
         addItem,
         removeItem,
