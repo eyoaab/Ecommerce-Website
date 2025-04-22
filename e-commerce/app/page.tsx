@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { getProducts, getCategories } from "@/lib/api";
 
-export default function Home() {
+export default async function Home() {
+  // Get products and categories from the API
+  const products = await getProducts();
+  const categories = await getCategories();
+
   // Get featured products (first 3)
   const featuredProducts = products.slice(0, 3);
-
-  // Get unique categories
-  const categories = [...new Set(products.map((product) => product.category))];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -60,14 +61,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                description={product.description}
-                price={product.price}
-                imageUrl={product.imageUrl}
-              />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
@@ -76,29 +70,37 @@ export default function Home() {
       {/* Categories Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-10 text-center">
-            Shop by Category
-          </h2>
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-3xl font-bold">Shop by Category</h2>
+            <Button variant="ghost" asChild>
+              <Link href="/categories">View All Categories</Link>
+            </Button>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category) => (
               <Link
                 href={`/products?category=${category}`}
                 key={category}
-                className="group relative h-60 overflow-hidden rounded-lg"
+                className="group relative h-60 overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
               >
-                <Image
-                  src={
-                    products.find((p) => p.category === category)?.imageUrl ||
-                    ""
-                  }
-                  alt={category}
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-                  <h3 className="text-xl font-bold text-white capitalize">
+                {/* Find a product in this category to use its image */}
+                <div className="absolute inset-0 bg-white">
+                  <Image
+                    src={
+                      products.find((p) => p.category === category)?.image || ""
+                    }
+                    alt={category}
+                    fill
+                    className="object-contain p-4 transition-transform group-hover:scale-105 duration-500"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col items-center justify-end p-6">
+                  <h3 className="text-xl font-bold text-white capitalize mb-2">
                     {category}
                   </h3>
+                  <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+                    Shop Now
+                  </span>
                 </div>
               </Link>
             ))}
