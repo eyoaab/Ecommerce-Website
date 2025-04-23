@@ -69,103 +69,210 @@ const API_URL = "https://fakestoreapi.com";
 
 // Products API
 export const getProducts = async (): Promise<Product[]> => {
-  const response = await fetch(`${API_URL}/products`);
-  if (!response.ok) throw new Error("Failed to fetch products");
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/products`, {
+      // Add next.js specific cache options for server components
+      next: { revalidate: 3600 }, // Revalidate every hour
+      cache: "force-cache",
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch products");
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return []; // Return empty array instead of throwing to prevent page crash
+  }
 };
 
-export const getProduct = async (id: number): Promise<Product> => {
-  const response = await fetch(`${API_URL}/products/${id}`);
-  if (!response.ok) throw new Error(`Failed to fetch product with id: ${id}`);
-  return response.json();
+export const getProduct = async (id: number): Promise<Product | null> => {
+  try {
+    const response = await fetch(`${API_URL}/products/${id}`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok) throw new Error(`Failed to fetch product with id: ${id}`);
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching product ${id}:`, error);
+    return null;
+  }
 };
 
 export const getProductsByCategory = async (
   category: string
 ): Promise<Product[]> => {
-  const response = await fetch(`${API_URL}/products/category/${category}`);
-  if (!response.ok)
-    throw new Error(`Failed to fetch products in category: ${category}`);
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/products/category/${category}`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok)
+      throw new Error(`Failed to fetch products in category: ${category}`);
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching products in category ${category}:`, error);
+    return [];
+  }
 };
 
 export const getCategories = async (): Promise<string[]> => {
-  const response = await fetch(`${API_URL}/products/categories`);
-  if (!response.ok) throw new Error("Failed to fetch categories");
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/products/categories`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch categories");
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
 };
 
 // Cart API
 export const getCarts = async (): Promise<Cart[]> => {
-  const response = await fetch(`${API_URL}/carts`);
-  if (!response.ok) throw new Error("Failed to fetch carts");
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/carts`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch carts");
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching carts:", error);
+    return [];
+  }
 };
 
-export const getUserCart = async (userId: number): Promise<Cart> => {
-  const response = await fetch(`${API_URL}/carts/user/${userId}`);
-  if (!response.ok) throw new Error(`Failed to fetch cart for user: ${userId}`);
-  return response.json();
+export const getUserCart = async (userId: number): Promise<Cart | null> => {
+  try {
+    const response = await fetch(`${API_URL}/carts/user/${userId}`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok)
+      throw new Error(`Failed to fetch cart for user: ${userId}`);
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching cart for user ${userId}:`, error);
+    return null;
+  }
 };
 
-export const addToCart = async (cart: Omit<Cart, "id">): Promise<Cart> => {
-  const response = await fetch(`${API_URL}/carts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(cart),
-  });
-  if (!response.ok) throw new Error("Failed to add to cart");
-  return response.json();
+export const addToCart = async (
+  cart: Omit<Cart, "id">
+): Promise<Cart | null> => {
+  try {
+    const response = await fetch(`${API_URL}/carts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cart),
+      // No cache for mutations
+    });
+
+    if (!response.ok) throw new Error("Failed to add to cart");
+    return response.json();
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    return null;
+  }
 };
 
-export const updateCart = async (cartId: number, cart: Cart): Promise<Cart> => {
-  const response = await fetch(`${API_URL}/carts/${cartId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(cart),
-  });
-  if (!response.ok) throw new Error("Failed to update cart");
-  return response.json();
+export const updateCart = async (
+  cartId: number,
+  cart: Cart
+): Promise<Cart | null> => {
+  try {
+    const response = await fetch(`${API_URL}/carts/${cartId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cart),
+      // No cache for mutations
+    });
+
+    if (!response.ok) throw new Error("Failed to update cart");
+    return response.json();
+  } catch (error) {
+    console.error(`Error updating cart ${cartId}:`, error);
+    return null;
+  }
 };
 
-export const deleteCart = async (cartId: number): Promise<{}> => {
-  const response = await fetch(`${API_URL}/carts/${cartId}`, {
-    method: "DELETE",
-  });
-  if (!response.ok) throw new Error("Failed to delete cart");
-  return response.json();
+export const deleteCart = async (cartId: number): Promise<{} | null> => {
+  try {
+    const response = await fetch(`${API_URL}/carts/${cartId}`, {
+      method: "DELETE",
+      // No cache for mutations
+    });
+
+    if (!response.ok) throw new Error("Failed to delete cart");
+    return response.json();
+  } catch (error) {
+    console.error(`Error deleting cart ${cartId}:`, error);
+    return null;
+  }
 };
 
 // User API
 export const getUsers = async (): Promise<User[]> => {
-  const response = await fetch(`${API_URL}/users`);
-  if (!response.ok) throw new Error("Failed to fetch users");
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/users`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch users");
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return [];
+  }
 };
 
-export const getUser = async (id: number): Promise<User> => {
-  const response = await fetch(`${API_URL}/users/${id}`);
-  if (!response.ok) throw new Error(`Failed to fetch user with id: ${id}`);
-  return response.json();
+export const getUser = async (id: number): Promise<User | null> => {
+  try {
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+    });
+
+    if (!response.ok) throw new Error(`Failed to fetch user with id: ${id}`);
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching user ${id}:`, error);
+    return null;
+  }
 };
 
 // Auth API
 export const login = async (
   credentials: LoginCredentials
-): Promise<LoginResponse> => {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  });
-  if (!response.ok) throw new Error("Authentication failed");
-  return response.json();
+): Promise<LoginResponse | null> => {
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+      // No cache for auth
+    });
+
+    if (!response.ok) throw new Error("Authentication failed");
+    return response.json();
+  } catch (error) {
+    console.error("Login error:", error);
+    return null;
+  }
 };
 
 // Getting user by token isn't directly supported by FakeStoreAPI

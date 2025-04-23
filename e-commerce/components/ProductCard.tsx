@@ -25,6 +25,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const router = useRouter();
   const { addItem } = useCart();
 
@@ -69,12 +70,17 @@ export function ProductCard({ product }: ProductCardProps) {
           </span>
         </div>
         <Image
-          src={product.image}
+          src={
+            imageError
+              ? "https://placehold.co/400x400?text=Product+Image"
+              : product.image
+          }
           alt={product.title}
           fill
           className={`object-contain p-4 transition-transform duration-500 w-full h-full ${
             isHovered ? "scale-110" : "scale-100"
           }`}
+          onError={() => setImageError(true)}
           // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={product.id < 4} // Prioritize first 3 images for loading
         />

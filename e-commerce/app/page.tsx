@@ -51,66 +51,71 @@ export default async function Home() {
       </section>
 
       {/* Featured Products Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold font-poppins tracking-tight">
-              Featured Products
-            </h2>
-            <Button variant="ghost" asChild className="font-inter">
-              <Link href="/products">View All</Link>
-            </Button>
+      {featuredProducts.length > 0 && (
+        <section className="py-16 bg-gray-50 dark:bg-gray-900">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-10">
+              <h2 className="text-3xl font-bold font-poppins tracking-tight">
+                Featured Products
+              </h2>
+              <Button variant="ghost" asChild className="font-inter">
+                <Link href="/products">View All</Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Categories Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold font-poppins tracking-tight">
-              Shop by Category
-            </h2>
-            <Button variant="ghost" asChild className="font-inter">
-              <Link href="/categories">View All Categories</Link>
-            </Button>
+      {categories.length > 0 && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-10">
+              <h2 className="text-3xl font-bold font-poppins tracking-tight">
+                Shop by Category
+              </h2>
+              <Button variant="ghost" asChild className="font-inter">
+                <Link href="/categories">View All Categories</Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {categories.map((category) => (
+                <Link
+                  href={`/products?category=${category}`}
+                  key={category}
+                  className="group relative h-60 overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                >
+                  {/* Find a product in this category to use its image */}
+                  <div className="absolute inset-0 bg-white">
+                    <Image
+                      src={
+                        products.find((p) => p.category === category)?.image ||
+                        "https://placehold.co/600x400?text=Image+Not+Found"
+                      }
+                      alt={category}
+                      fill
+                      className="object-contain p-4 transition-transform group-hover:scale-105 duration-500"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col items-center justify-end p-6">
+                    <h3 className="text-xl font-bold font-poppins text-white capitalize mb-2">
+                      {category}
+                    </h3>
+                    <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-inter">
+                      Shop Now
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories.map((category) => (
-              <Link
-                href={`/products?category=${category}`}
-                key={category}
-                className="group relative h-60 overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-              >
-                {/* Find a product in this category to use its image */}
-                <div className="absolute inset-0 bg-white">
-                  <Image
-                    src={
-                      products.find((p) => p.category === category)?.image || ""
-                    }
-                    alt={category}
-                    fill
-                    className="object-contain p-4 transition-transform group-hover:scale-105 duration-500"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col items-center justify-end p-6">
-                  <h3 className="text-xl font-bold font-poppins text-white capitalize mb-2">
-                    {category}
-                  </h3>
-                  <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-inter">
-                    Shop Now
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Newsletter Section */}
       <section className="py-16 bg-primary/5 dark:bg-primary/10">

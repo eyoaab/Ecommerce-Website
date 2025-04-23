@@ -25,6 +25,7 @@ interface ProductDetailsSheetProps {
 export function ProductDetailsSheet({ product }: ProductDetailsSheetProps) {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const { addItem } = useCart();
   const router = useRouter();
 
@@ -79,12 +80,17 @@ export function ProductDetailsSheet({ product }: ProductDetailsSheetProps) {
         <div className="p-4">
           <div className="relative aspect-square w-full max-w-md mx-auto mb-6 bg-white rounded-lg overflow-hidden border border-muted">
             <Image
-              src={product.image}
+              src={
+                imageError
+                  ? "https://placehold.co/400x400?text=Product+Image"
+                  : product.image
+              }
               alt={product.title}
               fill
               className="object-contain p-4 hover:scale-105 transition-transform duration-300"
               sizes="(max-width: 768px) 100vw, 400px"
               priority
+              onError={() => setImageError(true)}
             />
           </div>
 
