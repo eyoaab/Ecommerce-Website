@@ -219,3 +219,19 @@ export const getCurrentUser = (): AuthUser | null => {
     return null;
   }
 };
+
+// User update utility functions (for local storage only in this example)
+export const updateUser = (user: User): User => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+  return user;
+};
+
+export const deleteUserAccount = (): void => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("cart");
+  }
+};

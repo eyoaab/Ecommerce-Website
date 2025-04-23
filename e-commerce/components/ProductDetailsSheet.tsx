@@ -76,8 +76,8 @@ export function ProductDetailsSheet({ product }: ProductDetailsSheetProps) {
             {product.category}
           </SheetDescription>
         </SheetHeader>
-        <div className="py-4">
-          <div className="relative aspect-square w-full max-w-md mx-auto mb-6 bg-white dark:bg-gray-950 rounded-lg overflow-hidden border border-muted">
+        <div className="p-4">
+          <div className="relative aspect-square w-full max-w-md mx-auto mb-6 bg-white rounded-lg overflow-hidden border border-muted">
             <Image
               src={product.image}
               alt={product.title}
@@ -88,7 +88,7 @@ export function ProductDetailsSheet({ product }: ProductDetailsSheetProps) {
             />
           </div>
 
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-4 ">
             <div className="text-2xl font-bold text-primary dark:text-primary font-poppins">
               ${product.price.toFixed(2)}
             </div>

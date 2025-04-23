@@ -58,13 +58,13 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card
-      className="w-full max-w-sm overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full group"
+      className="w-full max-w-sm overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full group pt-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative h-72 w-full overflow-hidden bg-white dark:bg-gray-950">
+      <div className="relative h-72 w-full overflow-hidden bg-white ">
         <div className="absolute top-2 right-2 z-10">
-          <span className="inline-flex items-center rounded-full bg-purple-50 dark:bg-purple-900/30 px-2.5 py-0.5 text-xs font-medium text-primary dark:text-primary">
+          <span className="inline-flex items-center rounded-full bg-purple-900/30 px-2.5 py-0.5 text-xs font-medium text-purple-900">
             {product.category}
           </span>
         </div>
