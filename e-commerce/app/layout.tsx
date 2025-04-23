@@ -11,7 +11,7 @@ import UserAccountNav from "@/components/UserAccountNav";
 import { Toaster } from "sonner";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { ThemeProvider } from "@/providers/theme-provider";
-import MobileNavigation from "@/components/MobileNavigation";
+import MobileNavigation from "./components/MobileNavigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
