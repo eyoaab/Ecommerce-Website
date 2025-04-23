@@ -39,7 +39,7 @@ export function ProductsContent({
             className={`px-4 py-2 rounded-full border transition-colors ${
               activeCategory === categoryName
                 ? "bg-primary text-white"
-                : "hover:bg-gray-100"
+                : "hover:bg-gray-100 hover:text-gray-600"
             }`}
           >
             {categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}

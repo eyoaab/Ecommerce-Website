@@ -109,7 +109,7 @@ export default function CartPage() {
                     key={item.productId}
                     className="p-6 flex flex-col sm:flex-row items-start gap-4"
                   >
-                    <div className="relative h-24 w-24 flex-shrink-0 bg-gray-50 rounded-md border overflow-hidden">
+                    <div className="relative h-24 w-24 flex-shrink-0 bg-gray-50 rounded-md overflow-hidden">
                       <Image
                         src={item.product.image}
                         alt={item.product.title}
@@ -138,7 +138,7 @@ export default function CartPage() {
                           >
                             -
                           </button>
-                          <span className="px-3 py-1 border-x">
+                          <span className="px-3 py-1 border-x text-gray-600 ">
                             {item.quantity}
                           </span>
                           <button
@@ -195,14 +195,16 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-lg shadow sticky top-4">
-              <h2 className="text-xl font-bold mb-6 pb-4 border-b">
+              <h2 className="text-xl font-bold mb-6 pb-4 border-b text-black">
                 Order Summary
               </h2>
 
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span className="text-gray-600">
+                    ${totalPrice.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
@@ -210,11 +212,15 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tax</span>
-                  <span>${(totalPrice * 0.1).toFixed(2)}</span>
+                  <span className="text-gray-600">
+                    ${(totalPrice * 0.1).toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between pt-4 border-t text-lg font-bold">
-                  <span>Total</span>
-                  <span>${(totalPrice * 1.1).toFixed(2)}</span>
+                  <span className="text-black">Total</span>
+                  <span className="text-black">
+                    ${(totalPrice * 1.1).toFixed(2)}
+                  </span>
                 </div>
               </div>
 
