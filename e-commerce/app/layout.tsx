@@ -11,6 +11,7 @@ import UserAccountNav from "@/components/UserAccountNav";
 import { Toaster } from "sonner";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { ThemeProvider } from "@/providers/theme-provider";
+import MobileNavigation from "@/components/MobileNavigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,6 +36,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body
         className={`${poppins.variable} ${inter.variable} font-sans antialiased`}
         suppressHydrationWarning
@@ -42,8 +46,8 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
-              <header className="border-b">
-                <div className="container mx-auto flex h-16 items-center justify-between">
+              <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
+                <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
                   <div className="flex items-center gap-6">
                     <Link href="/" className="text-xl font-bold">
                       E-Commerce
@@ -75,7 +79,8 @@ export default function RootLayout({
                       </Link>
                     </nav>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 sm:gap-4">
+                    <MobileNavigation />
                     <ModeToggle />
                     <Link href="/cart">
                       <Button variant="ghost" size="icon" className="relative">
@@ -105,10 +110,10 @@ export default function RootLayout({
               <main>{children}</main>
               <footer className="border-t py-8 mt-12">
                 <div className="container mx-auto px-4">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                     <div>
                       <h3 className="font-bold text-lg mb-4">About Us</h3>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">
                         We offer high-quality products at competitive prices,
                         with exceptional customer service.
                       </p>
@@ -119,7 +124,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/products?category=electronics"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Electronics
                           </Link>
@@ -127,7 +132,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/products?category=jewelery"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Jewelry
                           </Link>
@@ -135,7 +140,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/products?category=men's clothing"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Men's Clothing
                           </Link>
@@ -143,7 +148,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/products?category=women's clothing"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Women's Clothing
                           </Link>
@@ -156,7 +161,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/products"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             All Products
                           </Link>
@@ -164,7 +169,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/categories"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Categories
                           </Link>
@@ -172,7 +177,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/cart"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Cart
                           </Link>
@@ -180,7 +185,7 @@ export default function RootLayout({
                         <li>
                           <Link
                             href="/auth/login"
-                            className="text-gray-600 text-sm hover:text-blue-600"
+                            className="text-gray-600 dark:text-gray-400 text-sm hover:text-primary"
                           >
                             Login
                           </Link>
@@ -189,7 +194,7 @@ export default function RootLayout({
                     </div>
                     <div>
                       <h3 className="font-bold text-lg mb-4">Contact</h3>
-                      <address className="not-italic text-gray-600 text-sm">
+                      <address className="not-italic text-gray-600 dark:text-gray-400 text-sm">
                         <p>123 E-Commerce St.</p>
                         <p>New York, NY 10001</p>
                         <p className="mt-2">Email: contact@ecommerce.com</p>

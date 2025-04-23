@@ -59,60 +59,67 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card
-      className="w-full max-w-sm overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full group pt-0"
+      className="w-full overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative h-72 w-full overflow-hidden bg-white ">
+      <div className="relative h-56 sm:h-64 md:h-72 w-full overflow-hidden bg-white">
         <div className="absolute top-2 right-2 z-10">
-          <span className="inline-flex items-center rounded-full bg-purple-900/30 px-2.5 py-0.5 text-xs font-medium text-purple-900">
+          <span className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:text-purple-300">
             {product.category}
           </span>
         </div>
-        <Image
-          src={
-            imageError
-              ? "https://placehold.co/400x400?text=Product+Image"
-              : product.image
-          }
-          alt={product.title}
-          fill
-          className={`object-contain p-4 transition-transform duration-500 w-full h-full ${
-            isHovered ? "scale-110" : "scale-100"
-          }`}
-          onError={() => setImageError(true)}
-          // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority={product.id < 4} // Prioritize first 3 images for loading
-        />
+        <Link href={`/products/${product.id}`} className="block w-full h-full">
+          <Image
+            src={
+              imageError
+                ? "https://placehold.co/400x400?text=Product+Image"
+                : product.image
+            }
+            alt={product.title}
+            fill
+            className={`object-contain p-4 transition-transform duration-500 w-full h-full ${
+              isHovered ? "scale-110" : "scale-100"
+            }`}
+            onError={() => setImageError(true)}
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={product.id < 4} // Prioritize first 3 images for loading
+          />
+        </Link>
       </div>
-      <CardHeader className="pb-2 pt-4">
-        <CardTitle className="line-clamp-1 text-lg font-poppins font-semibold tracking-tight">
-          {product.title}
+      <CardHeader className="pb-2 pt-4 px-3 sm:px-6">
+        <CardTitle className="line-clamp-1 text-base sm:text-lg font-poppins font-semibold tracking-tight">
+          <Link
+            href={`/products/${product.id}`}
+            className="hover:text-primary transition-colors"
+          >
+            {product.title}
+          </Link>
         </CardTitle>
-        <CardDescription className="line-clamp-2 h-10 text-sm font-inter mt-1">
+        <CardDescription className="line-clamp-2 h-10 text-xs sm:text-sm font-inter mt-1">
           {product.description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-2 pt-0">
+      <CardContent className="pb-2 pt-0 px-3 sm:px-6">
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-primary dark:text-primary font-poppins">
+          <div className="text-xl sm:text-2xl font-bold text-primary dark:text-primary font-poppins">
             ${product.price.toFixed(2)}
           </div>
-          <div className="flex items-center gap-1 text-sm bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
-            <span className="text-accent">★</span>
+          <div className="flex items-center gap-1 text-xs sm:text-sm bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
+            <span className="text-amber-500">★</span>
             <span className="text-gray-700 dark:text-gray-300 font-inter text-xs">
               {product.rating.rate} ({product.rating.count})
             </span>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between mt-auto pt-3 border-t gap-2">
-        <div className="flex gap-2">
+      <CardFooter className="flex flex-col sm:flex-row sm:justify-between mt-auto pt-3 px-3 sm:px-6 border-t gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
             asChild
-            className="border-primary/20 dark:border-primary/20 hover:bg-primary/10 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary font-inter text-xs"
+            className="border-primary/20 dark:border-primary/20 hover:bg-primary/10 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary font-inter text-xs w-full sm:w-auto"
           >
             <Link href={`/products/${product.id}`}>Details</Link>
           </Button>
@@ -121,7 +128,8 @@ export function ProductCard({ product }: ProductCardProps) {
         <Button
           onClick={handleAddToCart}
           disabled={isAddingToCart}
-          className="bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-white dark:text-primary-foreground font-medium"
+          className="bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-white dark:text-primary-foreground font-medium w-full sm:w-auto"
+          size="sm"
         >
           {isAddingToCart ? "Adding..." : "Add to Cart"}
         </Button>
